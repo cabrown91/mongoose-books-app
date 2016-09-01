@@ -23,10 +23,13 @@ app.get('/', function (req, res) {
 // get all books
 app.get('/api/books', function (req, res) {
   // send all books as JSON response
-  db.Book.find(function(err, books){
-    if (err) { return console.log("index error: " + err); }
-    res.json(books);
-  });
+  db.Book.find()
+    // populate fills in the author id with all the author data
+    .populate('author')
+    .exec(function(err, books){
+      if (err) { return console.log("index error: " + err); }
+      res.json(books);
+    });
 });
 
 // get one book
@@ -54,7 +57,7 @@ app.post('/api/books', function (req, res) {
 // delete book
 app.delete('/api/books/:id', function (req, res) {
   // get book id from url params (`req.params`)
-  console.log(req.params)
+  console.log(req.params);
   var bookId = req.params.id;
 
   db.Book.findOneAndRemove({ _id: bookId }, function (err, deletedBook) {

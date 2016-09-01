@@ -127,5 +127,3 @@ db.Author.remove({}, function(err, authors) {
 
   });
 });
-
-});
